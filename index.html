@@ -8,7 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <script>
 MathJax = {
-  tex: { inlineMath: [["\\(", "\\)"]], displayMath: [["\\[", "\\]"]] },
+  tex: { inlineMath: [["$","$"]], displayMath: [["$$","$$"]], processEscapes: true },
   options: { skipHtmlTags: ["script","noscript","style","textarea"] }
 };
 </script>
@@ -274,22 +274,22 @@ const QB = {
     standard: [
       {question:"Which value is between [[\\sqrt{2}]] and [[\\sqrt{3}]]?\n([[\\sqrt{2}]] \u2248 1.414, [[\\sqrt{3}]] \u2248 1.732)",options:["1.3","1.5","1.8","2.0"],correct:1,explanation:"[[\\sqrt{2}]] \u2248 1.414 and [[\\sqrt{3}]] \u2248 1.732. Only 1.5 lies strictly between them.",skill:"Compare magnitudes of rational and irrational numbers"},
       {question:"A car travels 156 miles on 6 gallons of gas. How many miles on 9 gallons?",options:["210","234","252","260"],correct:1,explanation:"Rate = 26 mpg. 26 \xd7 9 = 234 miles.",skill:"Solve problems with ratios, proportions, and percents"},
-      {question:"A store marks up items 35% above wholesale. A jacket costs $80 wholesale. What is the retail price?",options:["$100","$108","$112","$115"],correct:1,explanation:"Markup = 0.35 \xd7 $80 = $28. Retail = $80 + $28 = $108.",skill:"Solve problems with ratios, proportions, and percents"},
+      {question:"A store marks up items 35% above wholesale. A jacket costs \$80 wholesale. What is the retail price?",options:["\$100","\$108","\$112","\$115"],correct:1,explanation:"Markup = 0.35 \xd7 \$80 = \$28. Retail = \$80 + \$28 = \$108.",skill:"Solve problems with ratios, proportions, and percents"},
       {question:"Which value of x satisfies [[3x - 7 > 2x + 1]]?",options:["x > \u22128","x > 8","x < 8","x > 6"],correct:1,explanation:"Subtract 2x: x \u2212 7 > 1. Add 7: x > 8.",skill:"Identify, manipulate, and interpret linear inequalities"},
       {question:"A recipe calls for 2.5 cups of flour per 12 cookies. How many cups for 60 cookies?",options:["10.5","11","12.5","15"],correct:2,explanation:"[[\\dfrac{2.5}{12} = \\dfrac{x}{60}]] gives x = 12.5 cups.",skill:"Solve proportional relationship problems in context"},
       {question:"Order from least to greatest: 0.6, [[\\dfrac{3}{5}]], 58%, 0.605",options:["58%, [[\\dfrac{3}{5}]], 0.6, 0.605","[[\\dfrac{3}{5}]], 58%, 0.6, 0.605","58%, 0.6, [[\\dfrac{3}{5}]], 0.605","58%, 0.605, 0.6, [[\\dfrac{3}{5}]]"],correct:0,explanation:"As decimals: 58%=0.580, [[\\dfrac{3}{5}]]=0.600, 0.6=0.600, 0.605. Order: 0.580, 0.600, 0.600, 0.605.",skill:"Compare numbers in a variety of forms"},
       {question:"Round 3.8472 to the nearest hundredth.",options:["3.8","3.84","3.85","3.847"],correct:2,explanation:"Hundredths digit is 4; next digit is 7 (\u22655), so round up: 3.85.",skill:"Round numbers to a given decimal place"},
       {question:"Simplify: [[\\dfrac{3}{4} \\div \\dfrac{9}{16}]]",options:["[[\\dfrac{3}{4}]]","[[\\dfrac{4}{3}]]","[[\\dfrac{27}{64}]]","[[\\dfrac{12}{9}]]"],correct:1,explanation:"Multiply by reciprocal: [[\\dfrac{3}{4} \\times \\dfrac{16}{9} = \\dfrac{48}{36} = \\dfrac{4}{3}]]",skill:"Perform basic math operations with fractions"},
-      {question:"A 12-oz bottle costs $2.40. A 20-oz bottle costs $3.80. Which is better per ounce?",options:["12-oz bottle","20-oz bottle","They are the same","Cannot be determined"],correct:1,explanation:"12-oz: $0.20/oz. 20-oz: $0.19/oz. The 20-oz bottle is cheaper.",skill:"Solve proportional relationship problems in context"},
+      {question:"A 12-oz bottle costs \$2.40. A 20-oz bottle costs \$3.80. Which is better per ounce?",options:["12-oz bottle","20-oz bottle","They are the same","Cannot be determined"],correct:1,explanation:"12-oz: \$0.20/oz. 20-oz: \$0.19/oz. The 20-oz bottle is cheaper.",skill:"Solve proportional relationship problems in context"},
       {question:"Which of the following is an irrational number?",options:["[[\\dfrac{4}{7}]]","0.333\u2026","[[\\sqrt{16}]]","[[\\sqrt{5}]]"],correct:3,explanation:"[[\\sqrt{5}]] has a non-repeating, non-terminating decimal. The others are rational.",skill:"Compare magnitudes of rational and irrational numbers"},
       {question:"What is 15% of 240?",options:["24","36","48","3.6"],correct:1,explanation:"0.15 \xd7 240 = 36.",skill:"Solve problems with ratios, proportions, and percents"},
       {question:"A map scale is 1 inch = 50 miles. Two cities are 3.5 inches apart. Actual distance?",options:["150 miles","175 miles","200 miles","53.5 miles"],correct:1,explanation:"3.5 \xd7 50 = 175 miles.",skill:"Solve proportional relationship problems in context"},
       {question:"Which expression represents 'five less than twice a number n'?",options:["5 \u2212 2n","2n \u2212 5","2(n \u2212 5)","5 + 2n"],correct:1,explanation:"Twice a number = 2n. Five less than = subtract 5: 2n \u2212 5.",skill:"Identify, manipulate, and interpret linear expressions"},
       {question:"Evaluate: [[\u22123 + (\u22127) \\times 2 - (-4)]]",options:["\u221213","\u221216","\u22129","1"],correct:0,explanation:"Multiply first: \u22127 \xd7 2 = \u221214. Then \u22123 + (\u221214) \u2212 (\u22124) = \u22123 \u2212 14 + 4 = \u221213.",skill:"Perform basic math operations with integers"},
       {question:"What is [[\\dfrac{2}{3} + \\dfrac{3}{4}]]?",options:["[[\\dfrac{5}{7}]]","[[\\dfrac{5}{12}]]","[[\\dfrac{17}{12}]]","[[\\dfrac{6}{7}]]"],correct:2,explanation:"LCD = 12. [[\\dfrac{8}{12} + \\dfrac{9}{12} = \\dfrac{17}{12}]]",skill:"Perform basic math operations with fractions"},
-      {question:"A shirt costs $45 and is 20% off. What is the sale price?",options:["$9","$25","$36","$40"],correct:2,explanation:"Discount = $9. Sale price = $45 \u2212 $9 = $36.",skill:"Solve problems with ratios, proportions, and percents"},
+      {question:"A shirt costs \$45 and is 20% off. What is the sale price?",options:["\$9","\$25","\$36","\$40"],correct:2,explanation:"Discount = \$9. Sale price = \$45 \u2212 \$9 = \$36.",skill:"Solve problems with ratios, proportions, and percents"},
       {question:"Which is greater: [[\\sqrt{50}]] or 7?",options:["[[\\sqrt{50}]]","7","They are equal","Cannot be determined"],correct:0,explanation:"[[\\sqrt{49}]] = 7, so [[\\sqrt{50}]] > 7.",skill:"Compare magnitudes of rational and irrational numbers"},
-      {question:"A worker earns $14/hr for 37.5 hours. What is the weekly pay?",options:["$505","$525","$515","$490"],correct:1,explanation:"14 \xd7 37.5 = $525.",skill:"Solve proportional relationship problems in context"},
+      {question:"A worker earns \$14/hr for 37.5 hours. What is the weekly pay?",options:["\$505","\$525","\$515","\$490"],correct:1,explanation:"14 \xd7 37.5 = \$525.",skill:"Solve proportional relationship problems in context"},
       {question:"Simplify: [[5 \\times (-3)^2 - 10]]",options:["\u221255","35","45","\u221235"],correct:1,explanation:"[[ (-3)^2 = 9]]. 5 \xd7 9 = 45. 45 \u2212 10 = 35.",skill:"Perform basic math operations with integers"},
       {question:"Round 0.0456 to the nearest thousandth.",options:["0.04","0.045","0.046","0.0456"],correct:2,explanation:"Thousandths digit is 5; next digit is 6 (\u22655), round up: 0.046.",skill:"Round numbers to a given decimal place"},
       {question:"A solution is 40% alcohol. How many ml of alcohol in 250 ml of solution?",options:["40 ml","80 ml","100 ml","160 ml"],correct:2,explanation:"0.40 \xd7 250 = 100 ml.",skill:"Solve problems with ratios, proportions, and percents"},
@@ -307,12 +307,12 @@ const QB = {
       {question:"A number is increased by 25% and the result is 100. What was the original number?",options:["75","80","85","125"],correct:1,explanation:"[[1.25x = 100]] gives x = 80.",skill:"Solve problems with ratios, proportions, and percents"},
       {question:"Which value is between [[\\pi]] and [[\\sqrt{11}]]?\n([[\\pi \\approx 3.1416]], [[\\sqrt{11} \\approx 3.3166]])",options:["3.0","3.2","[[\\sqrt{12}]]","3.4"],correct:1,explanation:"3.2 lies between 3.1416 and 3.3166. The others fall outside.",skill:"Compare magnitudes of rational and irrational numbers"},
       {question:"Three workers complete a job in 8 hours. How long for 6 workers?",options:["2 hours","4 hours","12 hours","16 hours"],correct:1,explanation:"Total work = 24 worker-hours. 24 \xf7 6 = 4 hours.",skill:"Solve proportional relationship problems in context"},
-      {question:"A price increased from $80 to $100. What is the percent increase?",options:["20%","25%","80%","125%"],correct:1,explanation:"Percent increase = [[\\dfrac{20}{80} \\times 100 = 25\\%]]",skill:"Solve problems with ratios, proportions, and percents"},
+      {question:"A price increased from \$80 to \$100. What is the percent increase?",options:["20%","25%","80%","125%"],correct:1,explanation:"Percent increase = [[\\dfrac{20}{80} \\times 100 = 25\\%]]",skill:"Solve problems with ratios, proportions, and percents"},
       {question:"Which expression equals [[3(2x-4) - 2(x+1)]]?",options:["4x \u2212 10","4x \u2212 14","8x \u2212 14","4x + 14"],correct:1,explanation:"[[6x - 12 - 2x - 2 = 4x - 14]]",skill:"Identify and manipulate linear expressions"},
       {question:"A tank drains at 15 gal/min from 450 gallons. How long until [[\\dfrac{1}{3}]] full?",options:["20 min","30 min","10 min","15 min"],correct:0,explanation:"[[\\dfrac{1}{3}]] full = 150 gal. Must drain 300 gal. 300 \xf7 15 = 20 min.",skill:"Solve proportional relationship problems in context"},
-      {question:"A car depreciates 15%/year. Worth $20,000 now. Value in 2 years?",options:["$14,450","$17,000","$14,000","$15,500"],correct:0,explanation:"[[$20000 \\times (0.85)^2 = $20000 \\times 0.7225 = $14,450]]",skill:"Solve proportional relationship problems in context"},
+      {question:"A car depreciates 15%/year. Worth \$20,000 now. Value in 2 years?",options:["\$14,450","\$17,000","\$14,000","\$15,500"],correct:0,explanation:"[[\$20000 \\times (0.85)^2 = \$20000 \\times 0.7225 = \$14,450]]",skill:"Solve proportional relationship problems in context"},
       {question:"Solve for x: [[\\dfrac{3}{4}x + \\dfrac{1}{2} = 2]]",options:["x = 1","x = 2","x = 3","x = 4"],correct:1,explanation:"[[\\dfrac{3}{4}x = \\dfrac{3}{2}]] gives [[x = \\dfrac{3}{2} \\div \\dfrac{3}{4} = 2]]",skill:"Identify, manipulate, and interpret linear equations"},
-      {question:"A car gets 32 mpg. Gas costs $3.20/gallon. Cost of a 320-mile trip?",options:["$28","$32","$36","$40"],correct:1,explanation:"Gallons = 320 \xf7 32 = 10. Cost = 10 \xd7 $3.20 = $32.",skill:"Solve proportional relationship problems in context"},
+      {question:"A car gets 32 mpg. Gas costs \$3.20/gallon. Cost of a 320-mile trip?",options:["\$28","\$32","\$36","\$40"],correct:1,explanation:"Gallons = 320 \xf7 32 = 10. Cost = 10 \xd7 \$3.20 = \$32.",skill:"Solve proportional relationship problems in context"},
       {question:"Evaluate: [[(-2)^3 + 4^2 \\div (-2)]]",options:["\u221216","0","8","16"],correct:0,explanation:"[[(-2)^3 = -8]]. [[4^2 = 16]]. [[16 \\div (-2) = -8]]. Total: [[-8 + (-8) = -16]]",skill:"Perform basic math operations with integers"},
     ]
   },
@@ -336,7 +336,7 @@ const QB = {
       {question:"Solve the system: [[x + 2y = 8]] and [[x - y = 2]]",options:["x=4, y=2","x=6, y=1","x=2, y=3","x=5, y=3"],correct:0,explanation:"Subtract: [[3y = 6]] so y = 2. Then x = 4.",skill:"Solve systems of linear equations"},
       {question:"Which equation has slope 3 passing through (0, \u22124)?",options:["y = \u22124x + 3","y = 3x \u2212 4","y = 3x + 4","y = \u22123x \u2212 4"],correct:1,explanation:"[[y = mx + b]] with m=3, b=\u22124: [[y = 3x - 4]]",skill:"Evaluate linear functions"},
       {question:"Factor completely: [[x^2 - 9]]",options:["[[(x-3)^2]]","[[(x+3)(x-3)]]","[[(x-9)(x+1)]]","Cannot be factored"],correct:1,explanation:"Difference of squares: [[(x+3)(x-3)]]",skill:"Identify and manipulate quadratic expressions"},
-      {question:"A phone plan charges $30/month plus $0.10/text. The bill is $47. How many texts?",options:["47","170","200","130"],correct:1,explanation:"[[0.10t = 17]] gives t = 170 texts.",skill:"Solve linear equations"},
+      {question:"A phone plan charges \$30/month plus \$0.10/text. The bill is \$47. How many texts?",options:["47","170","200","130"],correct:1,explanation:"[[0.10t = 17]] gives t = 170 texts.",skill:"Solve linear equations"},
       {question:"Which value of x makes [[2x^2 = 50]] true?",options:["x = 5 only","x = \u22125 only","x = 5 or x = \u22125","x = 25"],correct:2,explanation:"[[x^2 = 25]] gives [[x = \\pm 5]]",skill:"Solve quadratic equations"},
       {question:"A line passes through (2,1) and (6,9). What is the equation?",options:["y = 2x \u2212 3","y = 2x + 3","y = 4x \u2212 7","y = 3x \u2212 5"],correct:0,explanation:"Slope = 2. [[y - 1 = 2(x-2)]] gives [[y = 2x - 3]]",skill:"Evaluate linear functions"},
       {question:"Solve: [[x^2 + x - 12 = 0]]",options:["x = 3 or x = \u22124","x = \u22123 or x = 4","x = 2 or x = \u22126","x = 6 or x = \u22122"],correct:0,explanation:"[[(x+4)(x-3) = 0]] gives x = \u22124 or x = 3.",skill:"Solve quadratic equations"},
@@ -348,7 +348,7 @@ const QB = {
       {question:"What are the x-intercepts of [[f(x) = x^2 - x - 12]]?",options:["x = 3 and x = \u22124","x = 4 and x = \u22123","x = 6 and x = \u22122","x = 2 and x = \u22126"],correct:1,explanation:"[[(x-4)(x+3) = 0]] gives x = 4 and x = \u22123.",skill:"Solve quadratic equations"},
       {question:"A substance decays 25% per year. Starting with 200g, how many grams after 3 years?",options:["50g","84.4g","112.5g","131.25g"],correct:1,explanation:"[[200 \\times (0.75)^3 \\approx 84.4]] g.",skill:"Solve exponential relationship problems in context"},
       {question:"Simplify: [[\\dfrac{x^2 - 9}{x^2 - x - 6}]]",options:["[[\\dfrac{x+3}{x+2}]]","[[\\dfrac{x-3}{x-2}]]","[[\\dfrac{x+3}{x-2}]]","1"],correct:0,explanation:"Factor: [[\\dfrac{(x+3)(x-3)}{(x-3)(x+2)} = \\dfrac{x+3}{x+2}]]",skill:"Identify and manipulate rational expressions"},
-      {question:"$10,000 earns 5% compounded annually. Value after 2 years?",options:["$11,000","$11,025","$11,050","$10,500"],correct:1,explanation:"[[10000 \\times (1.05)^2 = \\$11{,}025]]",skill:"Solve exponential relationship problems in context"},
+      {question:"\$10,000 earns 5% compounded annually. Value after 2 years?",options:["\$11,000","\$11,025","\$11,050","\$10,500"],correct:1,explanation:"[[10000 \\times (1.05)^2 = \\\$11{,}025]]",skill:"Solve exponential relationship problems in context"},
       {question:"Find all solutions to [[2x^2 - 8 = 0]].",options:["x = 2 only","x = \u22122 only","x = 2 or x = \u22122","x = 4"],correct:2,explanation:"[[x^2 = 4]] gives [[x = \\pm 2]]",skill:"Solve quadratic equations"},
       {question:"Solve the system: [[3x + 2y = 16]] and [[5x - 2y = 8]]",options:["x=3, y=3.5","x=3, y=3","x=4, y=2","x=2, y=5"],correct:0,explanation:"Add: [[8x = 24]] so x = 3. Then [[9 + 2y = 16]] gives y = 3.5.",skill:"Solve systems of linear equations"},
       {question:"For [[f(x) = 2^x]], what value of x gives [[f(x) = 32]]?",options:["x = 4","x = 5","x = 6","x = 16"],correct:1,explanation:"[[2^x = 32 = 2^5]] gives x = 5.",skill:"Solve exponential relationship problems in context"},
@@ -621,7 +621,7 @@ async function callClaude(prompt){
 // ─── RENDER ──────────────────────────────────────────────────
 function mathify(s) {
   if (!s) return '';
-  return s.split('[[').join('\(').split(']]').join('\)');
+  return s.split('[[').join('$').split(']]').join('$');
 }
 
 function renderQuestion(q){
@@ -635,7 +635,10 @@ function renderQuestion(q){
     btn.onclick=()=>selectAnswer(i);
     list.appendChild(btn);
   });
-  if(window.MathJax) setTimeout(()=>MathJax.typeset(),0);
+  if(window.MathJax) MathJax.typesetPromise([
+    document.getElementById('question-text'),
+    document.getElementById('options-list')
+  ]).catch(()=>{});
 }
 
 function updateMeta(){
@@ -690,7 +693,7 @@ function selectAnswer(idx){
   document.getElementById('feedback-skill').textContent='Skill: '+(currentQ.skill||'');
   document.getElementById('source-tag').textContent=currentQ._source==='ai'?'AI-generated question':'Question bank';
   fb.style.display='block';
-  if(window.MathJax) setTimeout(()=>MathJax.typeset(),0);
+  if(window.MathJax) MathJax.typesetPromise([fb]).catch(()=>{});
   history.push({q:currentQ.question,correct:ok,strand});
   addHistoryItem(currentQ.question,ok,strand);
   updateStrandProgress(); updateHeaderScore();

@@ -9,10 +9,11 @@
 <script>
 MathJax = {
   tex: { inlineMath: [["$","$"]], displayMath: [["$$","$$"]], processEscapes: true },
-  options: { skipHtmlTags: ["script","noscript","style","textarea"] }
+  options: { skipHtmlTags: ["script","noscript","style","textarea"] },
+  startup: { typeset: false }
 };
 </script>
-<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
 <style>
   :root {
     --bg:#f7f5f0;--surface:#fff;--surface2:#f0ede6;--border:#e2ddd4;
@@ -635,10 +636,14 @@ function renderQuestion(q){
     btn.onclick=()=>selectAnswer(i);
     list.appendChild(btn);
   });
-  if(window.MathJax) MathJax.typesetPromise([
-    document.getElementById('question-text'),
-    document.getElementById('options-list')
-  ]).catch(()=>{});
+  if(window.MathJax){
+    MathJax.startup.promise.then(()=>{
+      MathJax.typesetPromise([
+        document.getElementById('question-text'),
+        document.getElementById('options-list')
+      ]).catch(()=>{});
+    });
+  }
 }
 
 function updateMeta(){
@@ -693,7 +698,9 @@ function selectAnswer(idx){
   document.getElementById('feedback-skill').textContent='Skill: '+(currentQ.skill||'');
   document.getElementById('source-tag').textContent=currentQ._source==='ai'?'AI-generated question':'Question bank';
   fb.style.display='block';
-  if(window.MathJax) MathJax.typesetPromise([fb]).catch(()=>{});
+  if(window.MathJax){
+    MathJax.startup.promise.then(()=>MathJax.typesetPromise([fb]).catch(()=>{}));
+  }
   history.push({q:currentQ.question,correct:ok,strand});
   addHistoryItem(currentQ.question,ok,strand);
   updateStrandProgress(); updateHeaderScore();

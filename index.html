@@ -141,7 +141,6 @@ MathJax = {
 
 
 
-
   <!-- MODE PICKER -->
   <div id="mode-panel">
     <h2>Choose your practice mode</h2>
@@ -261,7 +260,7 @@ const TEACHER_CONFIG = {
   useAI: false,
 
   // Shown in the page header
-  institutionName: 'TSIA2 Prep - Jumpestart Level 1',
+  institutionName: 'TSIA2 Prep - Jumpstart Level 1',
 
 };
 // ═══════════════════════════════════════════════════════════════
@@ -636,11 +635,7 @@ function renderQuestion(q){
     btn.onclick=()=>selectAnswer(i);
     list.appendChild(btn);
   });
-  if(window.MathJax){
-    const els=[document.getElementById('question-text'),document.getElementById('options-list')];
-    MathJax.typesetClear(els);
-    MathJax.typesetPromise(els).catch(()=>{});
-  }
+  if(window.MathJax) MathJax.typeset();
 }
 
 function updateMeta(){
@@ -695,7 +690,7 @@ function selectAnswer(idx){
   document.getElementById('feedback-skill').textContent='Skill: '+(currentQ.skill||'');
   document.getElementById('source-tag').textContent=currentQ._source==='ai'?'AI-generated question':'Question bank';
   fb.style.display='block';
-  if(window.MathJax){MathJax.typesetClear([fb]);MathJax.typesetPromise([fb]).catch(()=>{});}
+  if(window.MathJax) MathJax.typeset();
   history.push({q:currentQ.question,correct:ok,strand});
   addHistoryItem(currentQ.question,ok,strand);
   updateStrandProgress(); updateHeaderScore();

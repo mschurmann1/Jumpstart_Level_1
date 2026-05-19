@@ -635,7 +635,7 @@ function renderQuestion(q){
     btn.onclick=()=>selectAnswer(i);
     list.appendChild(btn);
   });
-  if(window.MathJax) MathJax.typeset();
+  if(window.MathJax) setTimeout(()=>MathJax.typeset(),0);
 }
 
 function updateMeta(){
@@ -690,7 +690,7 @@ function selectAnswer(idx){
   document.getElementById('feedback-skill').textContent='Skill: '+(currentQ.skill||'');
   document.getElementById('source-tag').textContent=currentQ._source==='ai'?'AI-generated question':'Question bank';
   fb.style.display='block';
-  if(window.MathJax) MathJax.typeset();
+  if(window.MathJax) setTimeout(()=>MathJax.typeset(),0);
   history.push({q:currentQ.question,correct:ok,strand});
   addHistoryItem(currentQ.question,ok,strand);
   updateStrandProgress(); updateHeaderScore();

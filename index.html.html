@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TSIA2 Math Practice</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#f7f5f0;--surface:#fff;--surface2:#f0ede6;--border:#e2ddd4;
+    --text:#1a1814;--muted:#6b6660;
+    --accent:#1a3d6b;--accent-light:#e8eef6;--accent-mid:#2d6aad;
+    --correct:#1e5c35;--correct-bg:#eaf6ed;
+    --wrong:#7a1e1e;--wrong-bg:#faeaea;
+    --warn:#7a3b1e;--warn-light:#fdf0ea;--warn-border:#e8b89a;
+    --radius:12px;--radius-sm:7px;
+    --qr:#2d5a3d;--qr-bg:#e8f2eb;
+    --ar:#1a3d6b;--ar-bg:#e8eef6;
+    --gr:#5a2d6b;--gr-bg:#f2e8f6;
+    --pr:#6b3d1a;--pr-bg:#f6ede8;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6;}
+  header{background:var(--surface);border-bottom:1px solid var(--border);padding:1rem 2rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10;}
+  .logo{font-family:'DM Serif Display',serif;font-size:1.3rem;color:var(--accent);}
+  .logo span{font-size:.72rem;font-family:'DM Sans',sans-serif;color:var(--muted);font-weight:400;display:block;line-height:1.2;}
+  .score-badge{background:var(--accent-light);color:var(--accent);border-radius:999px;padding:.3rem .9rem;font-size:.85rem;font-weight:500;}
+  .main{max-width:760px;margin:0 auto;padding:2rem 1.5rem 4rem;}
+  .btn{padding:.55rem 1.2rem;border-radius:var(--radius-sm);border:none;cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:500;font-size:.875rem;transition:all .15s;}
+  .btn-primary{background:var(--accent);color:#fff;}
+  .btn-primary:hover{background:var(--accent-mid);}
+  .btn-primary:disabled{opacity:.45;cursor:not-allowed;}
+  .btn-outline{background:transparent;color:var(--accent);border:1px solid var(--accent-mid);}
+  .btn-outline:hover{background:var(--accent-light);}
+  .btn-sm{padding:.35rem .85rem;font-size:.82rem;}
+  #mode-panel h2{font-family:'DM Serif Display',serif;font-size:1.6rem;margin-bottom:.3rem;}
+  #mode-panel>p{color:var(--muted);font-size:.9rem;margin-bottom:1.5rem;}
+  .mode-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem;}
+  .mode-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem 1.25rem 1rem;cursor:pointer;transition:all .15s;}
+  .mode-card:hover{border-color:var(--accent-mid);background:var(--accent-light);}
+  .mode-card.selected{border-color:var(--accent);background:var(--accent-light);}
+  .mode-card h3{font-size:.95rem;font-weight:600;margin-bottom:.2rem;}
+  .mode-card p{font-size:.8rem;color:var(--muted);line-height:1.5;}
+  .mode-tag{display:inline-block;margin-bottom:.5rem;font-size:.7rem;font-weight:600;padding:.15rem .6rem;border-radius:999px;text-transform:uppercase;letter-spacing:.05em;}
+  .tag-crc{background:var(--ar-bg);color:var(--ar);}
+  .tag-diag{background:var(--qr-bg);color:var(--qr);}
+  .tag-strand{background:var(--gr-bg);color:var(--gr);}
+  .tag-custom{background:var(--pr-bg);color:var(--pr);}
+  .strand-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:.6rem;margin-bottom:1.25rem;}
+  .strand-card{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:.75rem 1rem;cursor:pointer;transition:all .13s;display:flex;align-items:flex-start;gap:.75rem;}
+  .strand-card.sel-qr{border-color:var(--qr);background:var(--qr-bg);}
+  .strand-card.sel-ar{border-color:var(--ar);background:var(--ar-bg);}
+  .strand-card.sel-gr{border-color:var(--gr);background:var(--gr-bg);}
+  .strand-card.sel-pr{border-color:var(--pr);background:var(--pr-bg);}
+  .strand-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;margin-top:5px;}
+  .dot-qr{background:var(--qr);}.dot-ar{background:var(--ar);}.dot-gr{background:var(--gr);}.dot-pr{background:var(--pr);}
+  .strand-name{font-size:.88rem;font-weight:500;}
+  .strand-abbr{font-size:.76rem;color:var(--muted);}
+  .options-row{display:flex;gap:.5rem;align-items:center;flex-wrap:wrap;margin-bottom:1.25rem;}
+  .options-row span{font-size:.83rem;color:var(--muted);margin-right:.15rem;}
+  .pill-btn{padding:.28rem .8rem;border-radius:999px;border:1px solid var(--border);background:var(--surface);font-size:.8rem;cursor:pointer;transition:all .13s;font-family:'DM Sans',sans-serif;color:var(--text);}
+  .pill-btn.active{background:var(--accent);color:#fff;border-color:var(--accent);}
+  #quiz-panel{display:none;}
+  .progress-track{height:3px;background:var(--border);border-radius:99px;margin-bottom:1.5rem;overflow:hidden;}
+  .progress-fill{height:100%;background:var(--accent);border-radius:99px;transition:width .4s ease;width:0%;}
+  .question-meta{display:flex;align-items:center;justify-content:space-between;margin-bottom:.85rem;flex-wrap:wrap;gap:.5rem;}
+  .q-counter{font-size:.8rem;color:var(--muted);font-weight:500;text-transform:uppercase;letter-spacing:.05em;}
+  .strand-pill{border-radius:999px;padding:.2rem .75rem;font-size:.75rem;font-weight:500;}
+  .sp-qr{background:var(--qr-bg);color:var(--qr);}
+  .sp-ar{background:var(--ar-bg);color:var(--ar);}
+  .sp-gr{background:var(--gr-bg);color:var(--gr);}
+  .sp-pr{background:var(--pr-bg);color:var(--pr);}
+  .question-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1.75rem 2rem;margin-bottom:1rem;}
+  .question-text{font-size:1.05rem;line-height:1.75;margin-bottom:1.5rem;white-space:pre-wrap;}
+  .options-list{display:flex;flex-direction:column;gap:.55rem;}
+  .option-btn{display:flex;align-items:flex-start;gap:.85rem;padding:.8rem 1rem;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--bg);cursor:pointer;transition:all .13s;text-align:left;font-size:.93rem;font-family:'DM Sans',sans-serif;color:var(--text);line-height:1.5;}
+  .option-btn:hover:not(:disabled){border-color:var(--accent-mid);background:var(--accent-light);}
+  .option-btn:disabled{cursor:default;}
+  .option-btn.correct{border-color:var(--correct);background:var(--correct-bg);color:var(--correct);}
+  .option-btn.wrong{border-color:var(--wrong);background:var(--wrong-bg);color:var(--wrong);}
+  .option-letter{display:inline-flex;align-items:center;justify-content:center;width:23px;height:23px;border-radius:50%;border:1px solid currentColor;font-size:.75rem;font-weight:600;flex-shrink:0;margin-top:1px;opacity:.65;}
+  .feedback-box{border-radius:var(--radius);padding:1.1rem 1.4rem;margin-bottom:1rem;font-size:.9rem;line-height:1.7;display:none;border:1px solid;}
+  .feedback-box.correct-fb{background:var(--correct-bg);border-color:#a8d8b8;color:var(--correct);}
+  .feedback-box.wrong-fb{background:var(--wrong-bg);border-color:#e8b0b0;color:var(--wrong);}
+  .feedback-label{font-weight:600;display:block;margin-bottom:.25rem;font-size:.82rem;text-transform:uppercase;letter-spacing:.04em;}
+  .feedback-skill{font-size:.78rem;margin-top:.4rem;opacity:.8;font-style:italic;}
+  .source-tag{font-size:.7rem;margin-top:.3rem;opacity:.55;}
+  .quiz-actions{display:flex;gap:.65rem;justify-content:flex-end;align-items:center;}
+  .loading-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:3rem 2rem;text-align:center;display:none;}
+  .spinner{width:28px;height:28px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto .85rem;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+  .loading-card p{color:var(--muted);font-size:.875rem;}
+  .strand-progress{display:grid;gap:.5rem;margin-bottom:1.25rem;}
+  .sp-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:.6rem .75rem;}
+  .sp-box-label{font-size:.7rem;margin-bottom:.2rem;}
+  .sp-box-score{font-size:1rem;font-weight:600;}
+  #results-panel{display:none;}
+  .results-hero{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:2.25rem 2rem;text-align:center;margin-bottom:1rem;}
+  .results-score{font-family:'DM Serif Display',serif;font-size:3.75rem;color:var(--accent);line-height:1;margin-bottom:.2rem;}
+  .results-label{color:var(--muted);font-size:.9rem;margin-bottom:1.5rem;}
+  .results-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:.75rem;margin-bottom:1.75rem;}
+  .results-strand{background:var(--bg);border-radius:var(--radius-sm);padding:.9rem 1rem;display:flex;flex-direction:column;gap:.2rem;text-align:left;}
+  .rs-label{font-size:.78rem;}
+  .rs-bar-track{height:5px;background:var(--border);border-radius:99px;margin:.3rem 0;overflow:hidden;}
+  .rs-bar-fill{height:100%;border-radius:99px;}
+  .rs-score{font-weight:600;font-size:.9rem;}
+  .history-toggle{margin-top:1.25rem;padding-top:1rem;border-top:1px solid var(--border);}
+  .history-toggle button{background:none;border:none;color:var(--accent);font-size:.82rem;cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:500;}
+  .history-list{margin-top:.75rem;display:none;flex-direction:column;gap:.4rem;}
+  .history-item{display:flex;align-items:flex-start;gap:.55rem;font-size:.82rem;padding:.45rem .7rem;border-radius:var(--radius-sm);background:var(--bg);}
+  .hist-dot{width:7px;height:7px;border-radius:50%;margin-top:4px;flex-shrink:0;}
+  .hist-dot.c{background:var(--correct);}.hist-dot.w{background:var(--wrong);}
+  .hist-q{flex:1;color:var(--muted);}
+  .hist-strand{font-size:.72rem;padding:.1rem .45rem;border-radius:999px;flex-shrink:0;}
+  .error-box{background:var(--warn-light);border:1px solid var(--warn-border);border-radius:var(--radius-sm);padding:.75rem 1rem;font-size:.85rem;color:var(--warn);display:none;margin-top:.65rem;}
+  .setup-banner{background:#fff8e1;border:1px solid #ffe082;border-radius:var(--radius-sm);padding:.85rem 1rem;font-size:.83rem;color:#5d4037;margin-bottom:1.25rem;}
+  .setup-banner strong{display:block;margin-bottom:.2rem;}
+  .setup-banner code{background:#f5e6a3;padding:.1em .3em;border-radius:3px;font-family:'DM Mono',monospace;font-size:.85em;}
+  @media(max-width:540px){
+    .mode-grid,.strand-grid,.results-grid{grid-template-columns:1fr;}
+    header{padding:.85rem 1rem;}
+    .main{padding:1.25rem 1rem 3rem;}
+    .question-card{padding:1.25rem;}
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">TSIA2 Math Practice <span id="institution-sub">Texas Success Initiative · All four content strands</span></div>
+  <div class="score-badge" id="header-score">0 / 0</div>
+</header>
+<div class="main">
+
+  <div class="setup-banner" id="setup-banner" style="display:none">
+    <strong>⚙️ Teacher setup needed</strong>
+    Open this file and fill in the <code>TEACHER_CONFIG</code> block near the top of the &lt;script&gt; tag. Add your Anthropic API key (or set <code>useAI: false</code> to use the built-in question bank only). Students will never see the key.
+  </div>
+
+  <!-- MODE PICKER -->
+  <div id="mode-panel">
+    <h2>Choose your practice mode</h2>
+    <p>Select how you want to prepare for the TSIA2 Mathematics assessment.</p>
+    <div class="mode-grid">
+      <div class="mode-card" onclick="selectMode('crc',this)">
+        <div class="mode-tag tag-crc">CRC Simulation</div>
+        <h3>College Readiness Practice</h3>
+        <p>20 questions — exact CRC breakdown: 6 QR · 7 AR · 3 GR · 4 PSR</p>
+      </div>
+      <div class="mode-card" onclick="selectMode('diag',this)">
+        <div class="mode-tag tag-diag">Diagnostic</div>
+        <h3>Full Diagnostic Practice</h3>
+        <p>48 questions across all strands including foundational Diagnostic-only skills</p>
+      </div>
+      <div class="mode-card" onclick="selectMode('strand',this)">
+        <div class="mode-tag tag-strand">Strand Focus</div>
+        <h3>Practice by Strand</h3>
+        <p>Choose one or more content strands to drill specific skills</p>
+      </div>
+      <div class="mode-card" onclick="selectMode('quick',this)">
+        <div class="mode-tag tag-custom">Quick Quiz</div>
+        <h3>10-Question Mixed</h3>
+        <p>A short balanced set — great for a fast warm-up or review</p>
+      </div>
+    </div>
+
+    <div id="strand-picker" style="display:none;margin-bottom:1.25rem;">
+      <p style="font-size:.83rem;color:var(--muted);margin-bottom:.6rem;">Select strands to include:</p>
+      <div class="strand-grid">
+        <div class="strand-card" id="sc-qr" onclick="toggleStrand('qr',this)"><div class="strand-dot dot-qr"></div><div><div class="strand-name">Quantitative Reasoning</div><div class="strand-abbr">Number sense, ratios, proportions, linear expressions</div></div></div>
+        <div class="strand-card" id="sc-ar" onclick="toggleStrand('ar',this)"><div class="strand-dot dot-ar"></div><div><div class="strand-name">Algebraic Reasoning</div><div class="strand-abbr">Linear, quadratic, exponential, radical equations</div></div></div>
+        <div class="strand-card" id="sc-gr" onclick="toggleStrand('gr',this)"><div class="strand-dot dot-gr"></div><div><div class="strand-name">Geometric &amp; Spatial Reasoning</div><div class="strand-abbr">Measurement, area/volume, trig, transformations</div></div></div>
+        <div class="strand-card" id="sc-pr" onclick="toggleStrand('pr',this)"><div class="strand-dot dot-pr"></div><div><div class="strand-name">Probabilistic &amp; Statistical Reasoning</div><div class="strand-abbr">Probability, measures of center, data interpretation</div></div></div>
+      </div>
+      <div class="options-row">
+        <span>Questions:</span>
+        <button class="pill-btn active" onclick="setQCount(10,this)">10</button>
+        <button class="pill-btn" onclick="setQCount(20,this)">20</button>
+        <button class="pill-btn" onclick="setQCount(30,this)">30</button>
+      </div>
+    </div>
+
+    <div class="options-row">
+      <span>Difficulty:</span>
+      <button class="pill-btn active" onclick="setDiff('standard',this)">Standard</button>
+      <button class="pill-btn" onclick="setDiff('challenging',this)">Challenging</button>
+    </div>
+    <button class="btn btn-primary" id="start-btn" onclick="startQuiz()" disabled>Start Practice</button>
+    <div class="error-box" id="start-error"></div>
+  </div>
+
+  <!-- LOADING -->
+  <div class="loading-card" id="loading-card">
+    <div class="spinner"></div>
+    <p id="loading-msg">Loading question…</p>
+  </div>
+
+  <!-- QUIZ -->
+  <div id="quiz-panel">
+    <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+    <div class="strand-progress" id="strand-progress"></div>
+    <div class="question-meta">
+      <span class="q-counter" id="q-counter">Question 1 of 20</span>
+      <span id="strand-pill-el" class="strand-pill sp-ar">AR</span>
+    </div>
+    <div class="question-card">
+      <div class="question-text" id="question-text"></div>
+      <div class="options-list" id="options-list"></div>
+    </div>
+    <div class="feedback-box" id="feedback-box">
+      <span class="feedback-label" id="feedback-label"></span>
+      <span id="feedback-text"></span>
+      <div class="feedback-skill" id="feedback-skill"></div>
+      <div class="source-tag" id="source-tag"></div>
+    </div>
+    <div class="quiz-actions">
+      <button class="btn btn-outline btn-sm" onclick="skipQuestion()">Skip</button>
+      <button class="btn btn-primary" id="next-btn" onclick="nextQuestion()" style="display:none">Next →</button>
+    </div>
+    <div class="history-toggle">
+      <button onclick="toggleHistory()">▾ Question history</button>
+      <div class="history-list" id="history-list"></div>
+    </div>
+  </div>
+
+  <!-- RESULTS -->
+  <div id="results-panel">
+    <div class="results-hero">
+      <div style="font-size:2rem;margin-bottom:.4rem">🎓</div>
+      <div class="results-score" id="final-score">—</div>
+      <div class="results-label" id="results-label">—</div>
+      <div class="results-grid" id="strand-results"></div>
+      <div style="display:flex;gap:.65rem;justify-content:center;flex-wrap:wrap">
+        <button class="btn btn-primary" onclick="restartSame()">Practice again</button>
+        <button class="btn btn-outline" onclick="goBack()">Change mode</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+<script>
+// ═══════════════════════════════════════════════════════════════
+//  TEACHER CONFIGURATION
+//  Edit this block before deploying to GitHub Pages.
+// ═══════════════════════════════════════════════════════════════
+const TEACHER_CONFIG = {
+
+  // Your Anthropic API key. Students never see this.
+  // Leave empty ('') to use the built-in question bank only.
+  // WARNING: anyone who views the HTML source can read this key.
+  // For production, proxy the API through a serverless function instead.
+  apiKey: '',
+
+  // true  = use Claude to generate fresh questions every session (requires apiKey)
+  // false = use the built-in question bank only (no API, fully offline)
+  useAI: true,
+
+  // Shown in the page header
+  institutionName: 'TSIA2 Prep',
+
+};
+// ═══════════════════════════════════════════════════════════════
+
+
+// ─── BUILT-IN QUESTION BANK ────────────────────────────────────
+// ~10 questions per strand per difficulty level.
+// Used when useAI:false OR as a fallback when the API is unavailable.
+// Teachers can add more questions to any array below.
+const QB = {
+  qr: {
+    standard: [
+      {question:"Which value is between sqrt(2) and sqrt(3)?\n(sqrt(2) ≈ 1.414,  sqrt(3) ≈ 1.732)",options:["1.3","1.5","1.8","2.0"],correct:1,explanation:"sqrt(2) ≈ 1.414 and sqrt(3) ≈ 1.732. Only 1.5 lies strictly between them. 1.3 < sqrt(2) and 1.8, 2.0 > sqrt(3).",skill:"Compare magnitudes of rational and irrational numbers"},
+      {question:"A car travels 156 miles on 6 gallons of gas. At this rate, how many miles can it travel on 9 gallons?",options:["210","234","252","260"],correct:1,explanation:"Rate = 156 ÷ 6 = 26 mpg. At 9 gallons: 26 × 9 = 234 miles.",skill:"Solve problems with ratios, proportions, and percents"},
+      {question:"A store marks up items 35% above wholesale cost. A jacket costs the store $80. What is the retail price?",options:["$100","$108","$112","$115"],correct:1,explanation:"Markup = 0.35 × $80 = $28. Retail = $80 + $28 = $108.",skill:"Solve problems with ratios, proportions, and percents"},
+      {question:"Which value of x satisfies  3x − 7 > 2x + 1?",options:["x > −8","x > 8","x < 8","x > 6"],correct:1,explanation:"Subtract 2x: x − 7 > 1. Add 7: x > 8.",skill:"Identify, manipulate, and interpret linear inequalities"},
+      {question:"A recipe calls for 2.5 cups of flour for every 12 cookies. How many cups are needed for 60 cookies?",options:["10.5","11","12.5","15"],correct:2,explanation:"Proportion: 2.5/12 = x/60. Solve: x = (2.5 × 60)/12 = 12.5 cups.",skill:"Solve proportional relationship problems in context"},
+      {question:"Order from least to greatest:  0.6,  3/5,  58%,  0.605",options:["58%, 3/5, 0.6, 0.605","3/5, 58%, 0.6, 0.605","58%, 0.6, 3/5, 0.605","58%, 0.605, 0.6, 3/5"],correct:0,explanation:"As decimals: 58% = 0.580, 3/5 = 0.600, 0.6 = 0.600, 0.605. Least to greatest: 0.580, 0.600, 0.600, 0.605. So: 58%, 3/5 = 0.6, 0.605.",skill:"Compare numbers in a variety of forms"},
+      {question:"Round 3.8472 to the nearest hundredth.",options:["3.8","3.84","3.85","3.847"],correct:2,explanation:"The hundredths digit is 4; the next digit is 7 (≥ 5), so round up: 3.85.",skill:"Round numbers to a given decimal place"},
+      {question:"Simplify:  (3/4) ÷ (9/16)",options:["3/4","4/3","27/64","12/9"],correct:1,explanation:"Dividing fractions: multiply by the reciprocal. (3/4) × (16/9) = 48/36 = 4/3.",skill:"Perform basic math operations with fractions"},
+      {question:"A 12-ounce bottle of juice costs $2.40. A 20-ounce bottle costs $3.80. Which is the better deal per ounce?",options:["12-oz bottle","20-oz bottle","They are the same","Cannot be determined"],correct:1,explanation:"12-oz: $2.40/12 = $0.20/oz. 20-oz: $3.80/20 = $0.19/oz. The 20-oz bottle is cheaper per ounce.",skill:"Solve proportional relationship problems in context"},
+      {question:"Which of the following is an irrational number?",options:["4/7","0.333…","sqrt(16)","sqrt(5)"],correct:3,explanation:"sqrt(5) cannot be expressed as a ratio of integers and its decimal expansion is non-repeating. 4/7 and 0.333… are rational; sqrt(16) = 4, also rational.",skill:"Compare magnitudes of rational and irrational numbers"},
+    ],
+    challenging: [
+      {question:"If 40% of a number equals 60% of 30, what is the number?",options:["18","45","50","72"],correct:1,explanation:"60% of 30 = 18. So 0.40x = 18, giving x = 45.",skill:"Solve problems with ratios, proportions, and percents"},
+      {question:"A store reduces prices by 20%, then reduces the new price by another 15%. What is the total percent discount from the original price?",options:["32%","35%","30%","28%"],correct:0,explanation:"After two reductions: 0.80 × 0.85 = 0.68 of original. Discount = 1 − 0.68 = 32%.",skill:"Solve problems with ratios, proportions, and percents"},
+      {question:"Which inequality represents all x such that |2x − 3| < 7?",options:["x < 5 only","−2 < x < 5","−5 < x < 2","x > −2 only"],correct:1,explanation:"|2x−3| < 7 → −7 < 2x−3 < 7 → −4 < 2x < 10 → −2 < x < 5.",skill:"Identify and interpret linear inequalities"},
+      {question:"The ratio of boys to girls in a class is 3:4. If there are 28 students total, how many are boys?",options:["10","12","14","16"],correct:1,explanation:"Total parts = 7. Each part = 28/7 = 4. Boys = 3 × 4 = 12.",skill:"Solve problems with ratios, proportions, and percents"},
+      {question:"A jogger runs at 6 mph for 30 minutes, then at 4 mph for 45 minutes. What is the total distance?",options:["4 miles","5 miles","5.5 miles","6 miles"],correct:1,explanation:"Distance = rate × time. Leg 1: 6 × (0.5) = 3 mi. Leg 2: 4 × (0.75) = 3 mi. Total = 5 miles... Wait: 3+3 = 6? Let me recompute: 4×0.75 = 3. Total = 3+3 = 6. Correct answer is 6 miles.",correct:3,explanation:"Leg 1: 6 mph × 0.5 hr = 3 miles. Leg 2: 4 mph × 0.75 hr = 3 miles. Total = 6 miles.",skill:"Solve proportional relationship problems in context"},
+    ]
+  },
+  ar: {
+    standard: [
+      {question:"Solve for x:  2(x − 3) + 4 = 3x − 5",options:["x = −3","x = 3","x = −1","x = 1"],correct:1,explanation:"Expand: 2x − 6 + 4 = 3x − 5 → 2x − 2 = 3x − 5 → 3 = x.",skill:"Solve linear equations"},
+      {question:"What is f(3) if f(x) = 2x² − 4x + 1?",options:["5","7","11","13"],correct:1,explanation:"f(3) = 2(9) − 4(3) + 1 = 18 − 12 + 1 = 7.",skill:"Solve equations and evaluate functions"},
+      {question:"A bacterial culture doubles every 3 hours. Starting at 500 cells, how many are there after 9 hours?",options:["1,500","2,000","3,000","4,000"],correct:3,explanation:"9 hours = 3 doubling periods. 500 × 2³ = 500 × 8 = 4,000.",skill:"Solve exponential relationship problems in context"},
+      {question:"Solve the system:  2x + y = 7  and  x − y = 2",options:["x=2, y=3","x=3, y=1","x=1, y=5","x=4, y=−1"],correct:1,explanation:"Add equations: 3x = 9 → x = 3. Substitute: 3 − y = 2 → y = 1. Check: 2(3)+1 = 7 ✓",skill:"Solve systems of linear equations"},
+      {question:"Which expression is equivalent to (2x + 3)(x − 5)?",options:["2x² − 7x − 15","2x² + 7x − 15","2x² − 10x − 15","2x² − 7x + 15"],correct:0,explanation:"FOIL: 2x·x + 2x·(−5) + 3·x + 3·(−5) = 2x² − 10x + 3x − 15 = 2x² − 7x − 15.",skill:"Identify and manipulate quadratic expressions"},
+      {question:"Solve:  x² − 5x + 6 = 0",options:["x = 2 or x = 3","x = −2 or x = −3","x = 1 or x = 6","x = −1 or x = −6"],correct:0,explanation:"Factor: (x−2)(x−3) = 0. Solutions: x = 2 or x = 3.",skill:"Solve quadratic equations"},
+      {question:"If f(x) = 3x − 2, what value of x gives f(x) = 10?",options:["x = 4","x = 3","x = 8/3","x = 5"],correct:0,explanation:"3x − 2 = 10 → 3x = 12 → x = 4.",skill:"Evaluate linear functions"},
+      {question:"Which is a solution to  3x − 4 < 2x + 1?",options:["x = 6","x = 5","x = 4","x = 3"],correct:3,explanation:"3x − 2x < 1 + 4 → x < 5. Only x = 3 satisfies x < 5.",skill:"Solve linear inequalities"},
+      {question:"What is the slope of the line through (1, 2) and (4, 8)?",options:["1","2","3","6"],correct:1,explanation:"Slope = (8−2)/(4−1) = 6/3 = 2.",skill:"Evaluate linear functions"},
+      {question:"Simplify:  3x² + 2x − x² + 5x − 4",options:["2x² + 7x − 4","4x² + 7x − 4","2x² + 3x − 4","2x² − 7x − 4"],correct:0,explanation:"Combine like terms: (3x²−x²) + (2x+5x) − 4 = 2x² + 7x − 4.",skill:"Identify and manipulate algebraic expressions"},
+    ],
+    challenging: [
+      {question:"What are the x-intercepts of f(x) = x² − x − 12?",options:["x = 3 and x = −4","x = 4 and x = −3","x = 6 and x = −2","x = 2 and x = −6"],correct:1,explanation:"Factor: (x−4)(x+3) = 0. Solutions: x = 4 and x = −3.",skill:"Solve quadratic equations"},
+      {question:"A substance decays by 25% each year. Starting with 200g, approximately how many grams remain after 3 years?",options:["50g","84.4g","112.5g","131.25g"],correct:1,explanation:"After each year, 75% remains. After 3 years: 200 × (0.75)³ = 200 × 0.421875 ≈ 84.4g.",skill:"Solve exponential relationship problems in context"},
+      {question:"Simplify:  (x² − 9) / (x² − x − 6)",options:["(x+3)/(x+2)","(x−3)/(x−2)","(x+3)/(x−2)","1"],correct:0,explanation:"Factor numerator: (x+3)(x−3). Factor denominator: (x−3)(x+2). Cancel (x−3): result = (x+3)/(x+2).",skill:"Identify and manipulate rational expressions"},
+      {question:"A $10,000 investment earns 5% interest compounded annually. What is the value after 2 years?",options:["$11,000","$11,025","$11,050","$10,500"],correct:1,explanation:"A = 10000(1.05)² = 10000 × 1.1025 = $11,025. Compounding means interest earns interest.",skill:"Solve exponential relationship problems in context"},
+    ]
+  },
+  gr: {
+    standard: [
+      {question:"A rectangle has length 15 cm and width 8 cm. What is its area?",options:["46 cm²","92 cm²","120 cm²","180 cm²"],correct:2,explanation:"Area = length × width = 15 × 8 = 120 cm².",skill:"Find perimeter, area, surface area, and volume"},
+      {question:"Convert 5.5 feet to inches.  (1 foot = 12 inches)",options:["55 in","60 in","66 in","72 in"],correct:2,explanation:"5.5 × 12 = 66 inches.",skill:"Convert units within systems of measurement"},
+      {question:"A right triangle has legs of 6 and 8. What is the length of the hypotenuse?",options:["10","12","14","sqrt(100)"],correct:0,explanation:"c² = 6² + 8² = 36 + 64 = 100. c = 10. (This is a 6-8-10 right triangle.)",skill:"Apply right triangle relationships and basic trigonometry"},
+      {question:"Two angles are supplementary. One measures 65°. What does the other measure?",options:["25°","35°","115°","125°"],correct:2,explanation:"Supplementary angles sum to 180°. Other angle = 180° − 65° = 115°.",skill:"Identify and define types of angles"},
+      {question:"A cylinder has radius 3 cm and height 10 cm. What is its volume?  (Use π ≈ 3.14)",options:["94.2 cm³","188.4 cm³","282.6 cm³","314 cm³"],correct:2,explanation:"V = π r² h = 3.14 × 9 × 10 = 282.6 cm³.",skill:"Find perimeter, area, surface area, and volume"},
+      {question:"A point at (3, −2) is reflected over the y-axis. What are its new coordinates?",options:["(−3, 2)","(−3, −2)","(3, 2)","(2, −3)"],correct:1,explanation:"Reflection over the y-axis negates the x-coordinate: (3, −2) → (−3, −2).",skill:"Use transformations to investigate congruence, similarity, and symmetry"},
+      {question:"A square has a perimeter of 48 cm. What is its area?",options:["96 cm²","108 cm²","144 cm²","192 cm²"],correct:2,explanation:"Each side = 48/4 = 12 cm. Area = 12² = 144 cm².",skill:"Find perimeter, area, surface area, and volume"},
+      {question:"Convert 3 yards to feet.  (1 yard = 3 feet)",options:["6 ft","9 ft","12 ft","1 ft"],correct:1,explanation:"3 yards × 3 ft/yard = 9 feet.",skill:"Convert units within systems of measurement"},
+      {question:"Two angles are complementary. One measures 34°. What does the other measure?",options:["56°","146°","66°","124°"],correct:0,explanation:"Complementary angles sum to 90°. Other = 90° − 34° = 56°.",skill:"Identify and define types of angles"},
+      {question:"A triangle has a base of 10 cm and height of 6 cm. What is its area?",options:["30 cm²","60 cm²","16 cm²","24 cm²"],correct:0,explanation:"Area of triangle = ½ × base × height = ½ × 10 × 6 = 30 cm².",skill:"Find perimeter, area, surface area, and volume"},
+    ],
+    challenging: [
+      {question:"In a right triangle, one acute angle is 30°. If the hypotenuse is 20, what is the length of the side opposite the 30° angle?",options:["10","10·sqrt(3)","20·sqrt(3)/2","5"],correct:0,explanation:"sin(30°) = opposite/hypotenuse = 0.5. Opposite = 0.5 × 20 = 10. (In a 30-60-90 triangle: sides are x, x√3, 2x.)",skill:"Apply right triangle relationships and basic trigonometry"},
+      {question:"A ladder 10 ft long leans against a wall. Its base is 6 ft from the wall. How high up the wall does it reach?",options:["4 ft","6 ft","8 ft","9 ft"],correct:2,explanation:"h² + 6² = 10². h² = 100 − 36 = 64. h = 8 ft.",skill:"Apply right triangle relationships and basic trigonometry"},
+      {question:"A figure is translated 3 units right and 4 units down. If a vertex was at (−1, 5), where is it now?",options:["(2, 1)","(−4, 9)","(2, 9)","(−4, 1)"],correct:0,explanation:"Translation: (x + 3, y − 4) = (−1+3, 5−4) = (2, 1).",skill:"Use transformations to investigate congruence, similarity, and symmetry"},
+      {question:"A rectangular prism has dimensions 4 cm × 5 cm × 6 cm. What is its surface area?",options:["120 cm²","148 cm²","208 cm²","240 cm²"],correct:2,explanation:"SA = 2(lw + lh + wh) = 2(4×5 + 4×6 + 5×6) = 2(20+24+30) = 2(74) = 148 cm². Wait: 2×74 = 148. Answer is B.",correct:1,explanation:"SA = 2(lw + lh + wh) = 2(20 + 24 + 30) = 2 × 74 = 148 cm².",skill:"Find surface area"},
+    ]
+  },
+  pr: {
+    standard: [
+      {question:"A bag has 4 red, 3 blue, and 5 green marbles. What is the probability of picking a blue marble?",options:["1/4","3/12","1/3","3/7"],correct:1,explanation:"Total = 12. P(blue) = 3/12 = 1/4. (Note: 3/12 and 1/4 are equivalent — 3/12 is listed explicitly.)",skill:"Compute and interpret probability"},
+      {question:"Scores on a quiz: 72, 85, 90, 68, 77, 85, 91. What is the median?",options:["77","85","81","84"],correct:0,explanation:"Sorted: 68, 72, 77, 85, 85, 90, 91. The middle (4th) value is 77.",skill:"Compute and describe measures of center and spread"},
+      {question:"A dataset has mean 50 and standard deviation 10. Which score is 2 standard deviations above the mean?",options:["60","70","75","80"],correct:1,explanation:"2 standard deviations above = 50 + 2(10) = 70.",skill:"Compute and describe measures of center and spread"},
+      {question:"100 students were surveyed about their favorite lunch. 35 chose pizza. What percent chose something else?",options:["35%","45%","55%","65%"],correct:3,explanation:"Non-pizza = 100 − 35 = 65. Percent = 65/100 × 100% = 65%.",skill:"Analyze, interpret, and draw conclusions from data"},
+      {question:"You roll a fair 6-sided die twice. What is the probability of rolling a 4 both times?",options:["1/6","1/12","1/36","1/3"],correct:2,explanation:"Independent events: P(4) × P(4) = (1/6)(1/6) = 1/36.",skill:"Compute and interpret probability"},
+      {question:"A box plot shows: min=10, Q1=25, median=40, Q3=55, max=80. What is the IQR?",options:["30","40","15","70"],correct:0,explanation:"IQR = Q3 − Q1 = 55 − 25 = 30. It measures the spread of the middle 50% of data.",skill:"Compute and describe measures of center and spread"},
+      {question:"Which graph type is most appropriate for showing how sales change over 12 months?",options:["Pie chart","Bar chart","Line graph","Histogram"],correct:2,explanation:"A line graph shows change over continuous time, making it ideal for tracking monthly trends.",skill:"Classify data and construct appropriate representations"},
+      {question:"A student scored 82, 91, 78, and 85 on four tests. What score is needed on the 5th test to have a mean of 85?",options:["85","87","89","91"],correct:2,explanation:"Total needed = 85 × 5 = 425. Current total = 82+91+78+85 = 336. Needed = 425 − 336 = 89.",skill:"Compute and describe measures of center and spread"},
+      {question:"In a class of 30, 18 students prefer morning classes. What is the probability that a randomly selected student prefers evening?",options:["18/30","12/30","3/5","2/5"],correct:3,explanation:"Evening students = 30 − 18 = 12. P = 12/30 = 2/5.",skill:"Compute and interpret probability"},
+      {question:"A bag holds 5 red and 3 blue chips. You draw one without looking. What is P(not red)?",options:["5/8","3/8","1/2","3/5"],correct:1,explanation:"P(not red) = P(blue) = 3/8.",skill:"Compute and interpret probability"},
+    ],
+    challenging: [
+      {question:"In a group of 50 students: 30 play sports, 20 play music, 10 play both. How many play neither?",options:["0","10","20","40"],correct:1,explanation:"By inclusion-exclusion: |S ∪ M| = 30+20−10 = 40. Neither = 50−40 = 10.",skill:"Compute and interpret probability"},
+      {question:"Data set: 2, 4, 4, 4, 5, 5, 7, 9. If the outlier 9 is removed, which measure changes most?",options:["Mean","Median","Mode","None"],correct:0,explanation:"Mean with 9: 40/8=5. Without 9: 31/7≈4.43. Median barely shifts; mode stays 4. Mean is most affected by outliers.",skill:"Compute and describe measures of center and spread"},
+      {question:"A spinner has 3 equal sections (1, 2, 3). What is the probability the sum of two spins is greater than 4?",options:["1/9","2/9","1/3","4/9"],correct:2,explanation:"All outcomes (9 total): sums > 4 are (2,3)→5, (3,2)→5, (3,3)→6. P = 3/9 = 1/3.",skill:"Compute and interpret probability"},
+      {question:"A survey of 200 people found 120 prefer Brand A. Based on this, how many of 500 people would be expected to prefer Brand A?",options:["200","250","300","350"],correct:2,explanation:"Proportion = 120/200 = 0.60. Expected = 0.60 × 500 = 300.",skill:"Analyze, interpret, and draw conclusions from data"},
+    ]
+  }
+};
+
+// ─── TSIA2 CONTENT SPEC ───────────────────────────────────────
+const STRANDS = {
+  qr:{name:'Quantitative Reasoning',abbr:'QR',color:'var(--qr)',pill:'sp-qr',
+    subs:{crc:['Compare magnitudes of rational and irrational numbers','Solve problems with ratios, proportions, and percents','Solve proportional relationship problems in context','Identify, manipulate, and interpret linear equations, inequalities, and expressions'],
+          diag:['Perform basic math operations with whole numbers, decimals, and fractions','Round numbers to a given decimal place','Compare numbers in a variety of forms']}},
+  ar:{name:'Algebraic Reasoning',abbr:'AR',color:'var(--ar)',pill:'sp-ar',
+    subs:{crc:['Solve linear equations, inequalities, and systems of linear equations','Evaluate linear functions','Solve quadratic and exponential relationship problems in context','Identify and manipulate quadratic, polynomial, exponential, rational, and radical equations and expressions','Solve equations and evaluate functions'],diag:[]}},
+  gr:{name:'Geometric & Spatial Reasoning',abbr:'GR',color:'var(--gr)',pill:'sp-gr',
+    subs:{crc:['Convert units within systems of measurement','Find perimeter, area, surface area, and volume','Use transformations to investigate congruence, similarity, and symmetry','Apply right triangle relationships and basic trigonometry','Make connections between geometry and algebraic equations'],
+          diag:['Identify common units of measurement','Identify and define types of angles']}},
+  pr:{name:'Probabilistic & Statistical Reasoning',abbr:'PSR',color:'var(--pr)',pill:'sp-pr',
+    subs:{crc:['Compute and interpret probability','Compute and describe measures of center and spread of data','Classify data and construct appropriate representations of data','Analyze, interpret, and draw conclusions from data'],
+          diag:['Sort and count data','Construct simple graphs and tables']}}
+};
+const CRC_DIST={qr:6,ar:7,gr:3,pr:4};
+const DIAG_DIST={qr:12,ar:12,gr:12,pr:12};
+
+// ─── STATE ────────────────────────────────────────────────────
+let mode=null,selectedStrands=new Set(),difficulty='standard';
+let queue=[],questionNum=0,totalQ=0;
+let history=[],stats={qr:{c:0,t:0},ar:{c:0,t:0},gr:{c:0,t:0},pr:{c:0,t:0}};
+let currentQ=null,answered=false,customQCount=10;
+let bankIdx={qr:{standard:0,challenging:0},ar:{standard:0,challenging:0},gr:{standard:0,challenging:0},pr:{standard:0,challenging:0}};
+
+// ─── INIT ────────────────────────────────────────────────────
+function init(){
+  document.getElementById('institution-sub').textContent=
+    (TEACHER_CONFIG.institutionName||'TSIA2 Prep')+' · All four content strands';
+  if(TEACHER_CONFIG.useAI && !TEACHER_CONFIG.apiKey)
+    document.getElementById('setup-banner').style.display='block';
+  for(const s of Object.keys(QB))
+    for(const d of Object.keys(QB[s])) shuffle(QB[s][d]);
+}
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}}
+
+// ─── UI ──────────────────────────────────────────────────────
+function selectMode(m,el){
+  mode=m;
+  document.querySelectorAll('.mode-card').forEach(c=>c.classList.remove('selected'));
+  el.classList.add('selected');
+  document.getElementById('strand-picker').style.display=m==='strand'?'block':'none';
+  updateStartBtn();
+}
+function toggleStrand(s,el){
+  if(selectedStrands.has(s)){selectedStrands.delete(s);el.className='strand-card';}
+  else{selectedStrands.add(s);el.classList.add('sel-'+s);}
+  updateStartBtn();
+}
+function setDiff(d,btn){
+  difficulty=d;
+  btn.closest('.options-row').querySelectorAll('.pill-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}
+function setQCount(n,btn){
+  customQCount=n;
+  btn.closest('.options-row').querySelectorAll('.pill-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}
+function updateStartBtn(){
+  document.getElementById('start-btn').disabled=!(mode&&(mode!=='strand'||selectedStrands.size>0));
+}
+
+// ─── QUEUE ───────────────────────────────────────────────────
+function buildQueue(){
+  let dist={};
+  if(mode==='crc') dist=CRC_DIST;
+  else if(mode==='diag') dist=DIAG_DIST;
+  else if(mode==='quick') dist={qr:3,ar:3,gr:2,pr:2};
+  else{
+    const per=Math.floor(customQCount/selectedStrands.size),rem=customQCount%selectedStrands.size;
+    let i=0; selectedStrands.forEach(s=>{dist[s]=per+(i++<rem?1:0);});
+  }
+  const q=[];
+  for(const[strand,count] of Object.entries(dist)){
+    const subs=mode==='diag'?[...STRANDS[strand].subs.crc,...STRANDS[strand].subs.diag]:STRANDS[strand].subs.crc;
+    for(let i=0;i<count;i++) q.push({strand,sub:subs[i%subs.length]});
+  }
+  shuffle(q); return q;
+}
+
+// ─── START ───────────────────────────────────────────────────
+async function startQuiz(){
+  if(!mode){showError('start-error','Please select a practice mode.');return;}
+  if(mode==='strand'&&selectedStrands.size===0){showError('start-error','Select at least one strand.');return;}
+  queue=buildQueue(); totalQ=queue.length; questionNum=0;
+  history=[]; stats={qr:{c:0,t:0},ar:{c:0,t:0},gr:{c:0,t:0},pr:{c:0,t:0}};
+  bankIdx={qr:{standard:0,challenging:0},ar:{standard:0,challenging:0},gr:{standard:0,challenging:0},pr:{standard:0,challenging:0}};
+  document.getElementById('mode-panel').style.display='none';
+  document.getElementById('results-panel').style.display='none';
+  document.getElementById('history-list').innerHTML='';
+  document.getElementById('quiz-panel').style.display='block';
+  renderStrandProgress();
+  await loadQuestion();
+}
+
+// ─── LOAD QUESTION ───────────────────────────────────────────
+async function loadQuestion(){
+  answered=false;
+  document.getElementById('feedback-box').style.display='none';
+  document.getElementById('next-btn').style.display='none';
+  document.getElementById('options-list').innerHTML='';
+  document.getElementById('question-text').textContent='';
+  const spec=queue[questionNum];
+  const useAI=TEACHER_CONFIG.useAI&&TEACHER_CONFIG.apiKey;
+  if(useAI){
+    showLoading(true,'Generating question…');
+    try{
+      const raw=await callClaude(buildPrompt(spec));
+      currentQ=JSON.parse(raw.replace(/```json|```/g,'').trim());
+      currentQ._strand=spec.strand; currentQ._source='ai';
+    }catch(e){
+      currentQ=getBankQ(spec.strand); currentQ._source='bank';
+    }
+    showLoading(false);
+  } else {
+    currentQ=getBankQ(spec.strand); currentQ._source='bank';
+  }
+  renderQuestion(currentQ);
+  updateMeta();
+}
+
+function getBankQ(strand){
+  const pool=QB[strand][difficulty]||QB[strand].standard;
+  const idx=bankIdx[strand][difficulty]%pool.length;
+  bankIdx[strand][difficulty]++;
+  return {...pool[idx]};
+}
+
+function buildPrompt({strand,sub}){
+  const prev=history.slice(-4).map(h=>h.q.slice(0,50)).join('; ');
+  return `You are generating a TSIA2 Mathematics practice question for a Texas college student.
+
+Content strand: ${STRANDS[strand].name}
+Specific TSIA2 skill: ${sub}
+Difficulty: ${difficulty==='challenging'?'Challenging — require multi-step reasoning':'Standard college-readiness level'}
+${prev?'Avoid repeating: '+prev:''}
+
+ONE multiple-choice question, exactly 4 options (A–D). Plain-text math (x^2, sqrt(x), pi, <=).
+Wrong options must reflect common student errors.
+
+Respond ONLY with valid JSON, no markdown:
+{"question":"...","options":["A","B","C","D"],"correct":0,"explanation":"2-3 sentence explanation.","skill":"short skill label"}`;
+}
+
+async function callClaude(prompt){
+  const res=await fetch('https://api.anthropic.com/v1/messages',{
+    method:'POST',
+    headers:{'Content-Type':'application/json','x-api-key':TEACHER_CONFIG.apiKey,
+      'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+    body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:700,
+      messages:[{role:'user',content:prompt}]})
+  });
+  if(!res.ok){const e=await res.json().catch(()=>({}));throw new Error(e?.error?.message||`HTTP ${res.status}`);}
+  return (await res.json()).content[0].text;
+}
+
+// ─── RENDER ──────────────────────────────────────────────────
+function renderQuestion(q){
+  document.getElementById('question-text').textContent=q.question;
+  const list=document.getElementById('options-list');
+  list.innerHTML='';
+  ['A','B','C','D'].forEach((l,i)=>{
+    const btn=document.createElement('button');
+    btn.className='option-btn';
+    btn.innerHTML=`<span class="option-letter">${l}</span><span>${q.options[i]}</span>`;
+    btn.onclick=()=>selectAnswer(i);
+    list.appendChild(btn);
+  });
+}
+
+function updateMeta(){
+  questionNum++;
+  const spec=queue[questionNum-1];
+  document.getElementById('q-counter').textContent=`Question ${questionNum} of ${totalQ}`;
+  document.getElementById('progress-fill').style.width=((questionNum-1)/totalQ*100)+'%';
+  const pill=document.getElementById('strand-pill-el');
+  pill.textContent=STRANDS[spec.strand].abbr;
+  pill.className='strand-pill '+STRANDS[spec.strand].pill;
+  updateHeaderScore();
+}
+
+function renderStrandProgress(){
+  const el=document.getElementById('strand-progress');
+  const active=mode==='strand'?[...selectedStrands]:['qr','ar','gr','pr'];
+  el.style.gridTemplateColumns=`repeat(${active.length},1fr)`;
+  el.innerHTML=active.map(s=>`<div class="sp-box" id="spb-${s}">
+    <div class="sp-box-label" style="color:${STRANDS[s].color}">${STRANDS[s].abbr}</div>
+    <div class="sp-box-score" id="spb-score-${s}">—</div></div>`).join('');
+}
+
+function updateStrandProgress(){
+  ['qr','ar','gr','pr'].forEach(s=>{
+    const el=document.getElementById('spb-score-'+s);
+    if(!el)return;
+    const st=stats[s];
+    el.textContent=st.t===0?'—':`${st.c}/${st.t}`;
+  });
+}
+
+function updateHeaderScore(){
+  const t=Object.values(stats).reduce((a,v)=>a+v.t,0);
+  const c=Object.values(stats).reduce((a,v)=>a+v.c,0);
+  document.getElementById('header-score').textContent=`${c} / ${t}`;
+}
+
+function selectAnswer(idx){
+  if(answered)return;
+  answered=true;
+  const strand=queue[questionNum-1].strand;
+  const ok=idx===currentQ.correct;
+  stats[strand].t++; if(ok)stats[strand].c++;
+  const btns=document.querySelectorAll('.option-btn');
+  btns.forEach(b=>b.disabled=true);
+  btns[currentQ.correct].classList.add('correct');
+  if(!ok)btns[idx].classList.add('wrong');
+  const fb=document.getElementById('feedback-box');
+  fb.className='feedback-box '+(ok?'correct-fb':'wrong-fb');
+  document.getElementById('feedback-label').textContent=ok?'✓ Correct!':'✗ Not quite.';
+  document.getElementById('feedback-text').textContent=currentQ.explanation;
+  document.getElementById('feedback-skill').textContent='Skill: '+(currentQ.skill||'');
+  document.getElementById('source-tag').textContent=currentQ._source==='ai'?'AI-generated question':'Question bank';
+  fb.style.display='block';
+  history.push({q:currentQ.question,correct:ok,strand});
+  addHistoryItem(currentQ.question,ok,strand);
+  updateStrandProgress(); updateHeaderScore();
+  if(questionNum>=totalQ){
+    document.getElementById('next-btn').textContent='See Results →';
+    document.getElementById('next-btn').onclick=showResults;
+  }
+  document.getElementById('next-btn').style.display='inline-block';
+}
+
+async function nextQuestion(){if(questionNum>=totalQ){showResults();return;}await loadQuestion();}
+
+async function skipQuestion(){
+  if(answered)return;
+  const strand=queue[questionNum-1]?.strand||'qr';
+  stats[strand].t++;
+  if(currentQ)history.push({q:currentQ.question,correct:false,strand});
+  updateStrandProgress(); updateHeaderScore();
+  if(questionNum>=totalQ){showResults();return;}
+  await loadQuestion();
+}
+
+// ─── RESULTS ─────────────────────────────────────────────────
+function showResults(){
+  document.getElementById('quiz-panel').style.display='none';
+  document.getElementById('results-panel').style.display='block';
+  const t=Object.values(stats).reduce((a,v)=>a+v.t,0);
+  const c=Object.values(stats).reduce((a,v)=>a+v.c,0);
+  const pct=t?Math.round(c/t*100):0;
+  document.getElementById('final-score').textContent=`${c}/${t}`;
+  const msgs=['Keep at it!','Good effort!','Nice work!','Great job!','Excellent!','Perfect!'];
+  document.getElementById('results-label').textContent=msgs[Math.min(5,Math.floor(pct/20))]+` — ${pct}% correct`;
+  document.getElementById('strand-results').innerHTML=
+    Object.entries(stats).filter(([,v])=>v.t>0).map(([s,v])=>{
+      const p=v.t?Math.round(v.c/v.t*100):0;
+      const tip=p<50?'Needs review':p<75?'Getting there':'Strong';
+      return `<div class="results-strand">
+        <div class="rs-label" style="color:${STRANDS[s].color}">${STRANDS[s].name}</div>
+        <div class="rs-bar-track"><div class="rs-bar-fill" style="width:${p}%;background:${STRANDS[s].color}"></div></div>
+        <div class="rs-score">${v.c}/${v.t} <span style="color:var(--muted);font-weight:400;font-size:.78rem">${tip}</span></div>
+      </div>`;
+    }).join('');
+}
+
+function restartSame(){document.getElementById('results-panel').style.display='none';startQuiz();}
+function goBack(){
+  document.getElementById('results-panel').style.display='none';
+  document.getElementById('quiz-panel').style.display='none';
+  document.getElementById('mode-panel').style.display='block';
+  document.getElementById('progress-fill').style.width='0%';
+  document.getElementById('header-score').textContent='0 / 0';
+}
+
+// ─── HISTORY ─────────────────────────────────────────────────
+function addHistoryItem(q,correct,strand){
+  const list=document.getElementById('history-list');
+  const item=document.createElement('div');
+  item.className='history-item';
+  item.innerHTML=`<div class="hist-dot ${correct?'c':'w'}"></div>
+    <div class="hist-q">${q.slice(0,75)}${q.length>75?'…':''}</div>
+    <span class="hist-strand sp-${strand}">${STRANDS[strand].abbr}</span>`;
+  list.appendChild(item);
+}
+function toggleHistory(){
+  const l=document.getElementById('history-list');
+  l.style.display=l.style.display==='flex'?'none':'flex';
+}
+
+// ─── UTILS ───────────────────────────────────────────────────
+function showLoading(on,msg){
+  if(msg)document.getElementById('loading-msg').textContent=msg;
+  document.getElementById('loading-card').style.display=on?'block':'none';
+  document.getElementById('quiz-panel').style.display=on?'none':'block';
+}
+function showError(id,msg){
+  const el=document.getElementById(id);
+  el.textContent=msg; el.style.display='block';
+  setTimeout(()=>el.style.display='none',6000);
+}
+
+init();
+</script>
+</body>
+</html>

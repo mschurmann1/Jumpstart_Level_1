@@ -547,6 +547,9 @@ async function startQuiz(){
   document.getElementById('results-panel').style.display='none';
   document.getElementById('history-list').innerHTML='';
   document.getElementById('quiz-panel').style.display='block';
+  const nb=document.getElementById('next-btn');
+  nb.textContent='Next →';
+  nb.onclick=nextQuestion;
   renderStrandProgress();
   await loadQuestion();
 }
@@ -555,7 +558,10 @@ async function startQuiz(){
 async function loadQuestion(){
   answered=false;
   document.getElementById('feedback-box').style.display='none';
-  document.getElementById('next-btn').style.display='none';
+  const nBtn=document.getElementById('next-btn');
+  nBtn.style.display='none';
+  nBtn.textContent='Next →';
+  nBtn.onclick=nextQuestion;
   document.getElementById('options-list').innerHTML='';
   document.getElementById('question-text').textContent='';
   const spec=queue[questionNum];
@@ -688,11 +694,15 @@ function selectAnswer(idx){
   history.push({q:currentQ.question,correct:ok,strand});
   addHistoryItem(currentQ.question,ok,strand);
   updateStrandProgress(); updateHeaderScore();
+  const nextBtn=document.getElementById('next-btn');
   if(questionNum>=totalQ){
-    document.getElementById('next-btn').textContent='See Results →';
-    document.getElementById('next-btn').onclick=showResults;
+    nextBtn.textContent='See Results →';
+    nextBtn.onclick=showResults;
+  } else {
+    nextBtn.textContent='Next →';
+    nextBtn.onclick=nextQuestion;
   }
-  document.getElementById('next-btn').style.display='inline-block';
+  nextBtn.style.display='inline-block';
 }
 
 async function nextQuestion(){if(questionNum>=totalQ){showResults();return;}await loadQuestion();}

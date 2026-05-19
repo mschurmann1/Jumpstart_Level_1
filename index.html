@@ -132,10 +132,7 @@
 </header>
 <div class="main">
 
-  <div class="setup-banner" id="setup-banner" style="display:none">
-    <strong>⚙️ Teacher setup needed</strong>
-    Open this file and fill in the <code>TEACHER_CONFIG</code> block near the top of the &lt;script&gt; tag. Add your Anthropic API key (or set <code>useAI: false</code> to use the built-in question bank only). Students will never see the key.
-  </div>
+
 
   <!-- MODE PICKER -->
   <div id="mode-panel">
@@ -253,10 +250,10 @@ const TEACHER_CONFIG = {
 
   // true  = use Claude to generate fresh questions every session (requires apiKey)
   // false = use the built-in question bank only (no API, fully offline)
-  useAI: true,
+  useAI: false,
 
   // Shown in the page header
-  institutionName: 'TSIA2 Prep',
+  institutionName: 'Jumpstart Level 1',
 
 };
 // ═══════════════════════════════════════════════════════════════

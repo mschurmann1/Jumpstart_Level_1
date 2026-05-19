@@ -8,8 +8,8 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <script>
 MathJax = {
-  tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] },
-  options: { skipHtmlTags: ['script','noscript','style','textarea'] }
+  tex: { inlineMath: [["\\(", "\\)"]], displayMath: [["\\[", "\\]"]] },
+  options: { skipHtmlTags: ["script","noscript","style","textarea"] }
 };
 </script>
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
@@ -613,9 +613,9 @@ async function callClaude(prompt){
 }
 
 // ─── RENDER ──────────────────────────────────────────────────
-function mathify(str) {
-  // Convert [[ ]] markers to MathJax \( \) delimiters
-  return str.replace(/\[\[/g, '\\(').replace(/\]\]/g, '\\)');
+function mathify(s) {
+  if (!s) return '';
+  return s.split('[[').join('\(').split(']]').join('\)');
 }
 
 function renderQuestion(q){
@@ -629,7 +629,6 @@ function renderQuestion(q){
     btn.onclick=()=>selectAnswer(i);
     list.appendChild(btn);
   });
-  // Render math in question and options
   if(window.MathJax) MathJax.typesetPromise([document.getElementById('question-text'), document.getElementById('options-list')]).catch(()=>{});
 }
 

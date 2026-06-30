@@ -243,6 +243,20 @@ MathJax = {
   </div>
 
 </div>
+
+<button id="bank-toggle-btn" onclick="openBankReview()" style="position:fixed;bottom:1.5rem;right:1.5rem;z-index:50;background:var(--accent);color:#fff;border:none;border-radius:999px;padding:.75rem 1.3rem;font-family:'DM Sans',sans-serif;font-weight:500;font-size:.85rem;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.18);">📋 Review question bank</button>
+
+<div id="bank-review-panel" style="display:none;position:fixed;inset:0;background:var(--bg);z-index:100;overflow-y:auto;">
+  <div style="position:sticky;top:0;background:var(--surface);border-bottom:1px solid var(--border);padding:1rem 1.5rem;display:flex;align-items:center;justify-content:space-between;z-index:5;">
+    <div>
+      <div style="font-family:'DM Serif Display',serif;font-size:1.2rem;color:var(--accent);">Question bank review</div>
+      <div style="font-size:.78rem;color:var(--muted);">Every question in the bank, rendered as students will see it. Use this to spot LaTeX or formatting errors.</div>
+    </div>
+    <button class="btn btn-outline btn-sm" onclick="closeBankReview()">Close ✕</button>
+  </div>
+  <div style="max-width:880px;margin:0 auto;padding:1.5rem;" id="bank-review-content"></div>
+</div>
+
 <script>
 // ═══════════════════════════════════════════════════════════════
 //  TEACHER CONFIGURATION
@@ -783,6 +797,53 @@ function showError(id,msg){
   const el=document.getElementById(id);
   el.textContent=msg; el.style.display='block';
   setTimeout(()=>el.style.display='none',6000);
+}
+
+// ─── QUESTION BANK REVIEW ──────────────────────────────────────
+function openBankReview(){
+  document.getElementById('bank-review-panel').style.display='block';
+  document.getElementById('bank-toggle-btn').style.display='none';
+  renderBankReview();
+}
+function closeBankReview(){
+  document.getElementById('bank-review-panel').style.display='none';
+  document.getElementById('bank-toggle-btn').style.display='inline-block';
+}
+function renderBankReview(){
+  const container=document.getElementById('bank-review-content');
+  let html='';
+  Object.keys(QB).forEach(strandKey=>{
+    const strand=STRANDS[strandKey];
+    ['standard','challenging'].forEach(diff=>{
+      const list=QB[strandKey][diff];
+      if(!list||!list.length)return;
+      html+=`<h3 style="font-family:'DM Serif Display',serif;color:${strand.color};margin:1.75rem 0 .75rem;font-size:1.15rem;">${strand.name} — ${diff} (${list.length} questions)</h3>`;
+      list.forEach((q,i)=>{
+        html+=`<div class="question-card" style="margin-bottom:.85rem;padding:1.25rem 1.5rem;">
+          <div style="font-size:.72rem;color:var(--muted);margin-bottom:.5rem;">#${i+1} · Skill: ${q.skill||'—'}</div>
+          <div class="question-text" style="font-size:.95rem;margin-bottom:1rem;">${mathify(q.question).replace(/\n/g,'<br>')}</div>
+          <div class="options-list">`;
+        q.options.forEach((opt,oi)=>{
+          const isCorrect=oi===q.correct;
+          html+=`<div class="option-btn" style="cursor:default;${isCorrect?'border-color:var(--correct);background:var(--correct-bg);color:var(--correct);':''}">
+            <span class="option-letter">${'ABCD'[oi]}</span><span>${mathify(opt)}</span>${isCorrect?' <strong>(correct)</strong>':''}
+          </div>`;
+        });
+        html+=`</div>
+          <div class="feedback-box correct-fb" style="display:block;margin-top:.85rem;">
+            <span class="feedback-label">Explanation</span>
+            <span>${mathify(q.explanation)}</span>
+          </div>
+        </div>`;
+      });
+    });
+  });
+  container.innerHTML=html;
+  if(window.MathJax){
+    MathJax.startup.promise.then(()=>{
+      MathJax.typesetPromise([container]).catch(()=>{});
+    });
+  }
 }
 
 init();

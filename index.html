@@ -8,7 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <script>
 MathJax = {
-  tex: { inlineMath: [["$","$"]], displayMath: [["$$","$$"]], processEscapes: true },
+  tex: { inlineMath: [["\\(","\\)"]], displayMath: [["\\[","\\]"]], processEscapes: false },
   options: { skipHtmlTags: ["script","noscript","style","textarea"] },
   startup: { typeset: false }
 };
@@ -622,7 +622,7 @@ async function callClaude(prompt){
 // ─── RENDER ──────────────────────────────────────────────────
 function mathify(s) {
   if (!s) return '';
-  return s.split('[[').join('$').split(']]').join('$');
+  return s.split('[[').join('\\(').split(']]').join('\\)');
 }
 
 function renderQuestion(q){
